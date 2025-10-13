@@ -51,9 +51,17 @@
 
                     <div class="col-md-4 mb-3">
                         <label for="fecha_nacimiento" class="form-label">Fecha de Nacimiento</label>
-                        <?php $fnac = old('fecha_nacimiento', $estudiante['fecha_nacimiento']); ?>
+                        <?php 
+                        $fnac = old('fecha_nacimiento', $estudiante['fecha_nacimiento']);
+                        // ✅ MEJOR MANEJO DE FECHAS
+                        if (!empty($fnac) && $fnac != '0000-00-00') {
+                            $fecha_formateada = date('Y-m-d', strtotime($fnac));
+                        } else {
+                            $fecha_formateada = '';
+                        }
+                        ?>
                         <input type="date" id="fecha_nacimiento" name="fecha_nacimiento" class="form-control" 
-                               value="<?= $fnac ? date('Y-m-d', strtotime($fnac)) : '' ?>" required>
+                               value="<?= $fecha_formateada ?>" required>
                     </div>
 
                     <div class="col-12 mb-3">
@@ -80,9 +88,17 @@
 
                     <div class="col-md-4 mb-3">
                         <label for="fecha_ingreso" class="form-label">Fecha de Ingreso</label>
-                        <?php $fing = old('fecha_ingreso', $estudiante['fecha_ingreso']); ?>
+                        <?php 
+                        $fing = old('fecha_ingreso', $estudiante['fecha_ingreso']);
+                        // ✅ MEJOR MANEJO DE FECHAS
+                        if (!empty($fing) && $fing != '0000-00-00') {
+                            $fecha_ingreso_formateada = date('Y-m-d', strtotime($fing));
+                        } else {
+                            $fecha_ingreso_formateada = '';
+                        }
+                        ?>
                         <input type="date" id="fecha_ingreso" name="fecha_ingreso" class="form-control" 
-                               value="<?= $fing ? date('Y-m-d', strtotime($fing)) : '' ?>" required>
+                               value="<?= $fecha_ingreso_formateada ?>" required>
                     </div>
                 </div>
 

@@ -9,11 +9,11 @@ class EstudianteModel extends Model
     protected $returnType   = 'array';
     protected $allowedFields = ['nombre', 'apellido', 'dni', 'telefono', 'fecha_nacimiento', 'direccion', 'carrera_id', 'fecha_ingreso'];
 
-    // ✅ SOLO validaciones básicas - SIN problemas de fecha
+    // ✅ REGLAS DE VALIDACIÓN SIMPLIFICADAS - SIN PLACEHOLDERS
     protected $validationRules = [
         'nombre'     => 'required',
         'apellido'   => 'required',
-        'dni'        => 'required|is_unique[estudiantes.dni,id,{id}]',
+        'dni'        => 'required', // Quitamos is_unique temporalmente
         'telefono'   => 'required',
         'direccion'  => 'required',
         'carrera_id' => 'required',
@@ -24,10 +24,7 @@ class EstudianteModel extends Model
     protected $validationMessages = [
         'nombre'     => ['required' => 'El campo Nombre es obligatorio.'],
         'apellido'   => ['required' => 'El campo Apellido es obligatorio.'],
-        'dni'        => [
-            'required'  => 'El campo DNI es obligatorio.',
-            'is_unique' => 'El DNI ingresado ya se encuentra registrado.',
-        ],
+        'dni'        => ['required' => 'El campo DNI es obligatorio.'],
         'telefono'   => ['required' => 'El campo Teléfono es obligatorio.'],
         'direccion'  => ['required' => 'El campo Dirección es obligatorio.'],
         'carrera_id' => ['required' => 'Debe seleccionar una Carrera.'],
@@ -40,5 +37,17 @@ class EstudianteModel extends Model
         return $this->select('estudiantes.*, carreras.nombre as nombre_carrera')
                     ->join('carreras', 'carreras.id = estudiantes.carrera_id')
                     ->findAll();
+    }
+
+    // ✅ MÉTODO PARA VALIDAR DNI ÚNICO (MANUAL)
+    public function esDniUnico($dni, $id = 0)
+    {
+        $builder = $this->where('dni', $dni);
+        
+        if ($id > 0) {
+            $builder->where('id !=', $id);
+        }
+        
+        return $builder->countAllResults() === 0;
     }
 }
