@@ -31,6 +31,12 @@ class ProfesoresController extends Controller
     public function guardar()
     {
         $data = $this->request->getPost();
+
+        // ✅ VALIDACIÓN MANUAL DE DNI ÚNICO PARA CREACIÓN
+        if (!$this->profesorModel->esDniUnico($data['dni'])) {
+            return redirect()->back()->withInput()->with('errors', ['El DNI ingresado ya se encuentra registrado.']);
+        }
+
         if ($this->profesorModel->insert($data)) {
             return redirect()->to(base_url('profesores'))->with('mensaje', 'Profesor creado exitosamente.');
         } else {
@@ -48,13 +54,26 @@ class ProfesoresController extends Controller
         return view('profesores/editar', $data);
     }
 
-    // ACTUALIZAR (U)
+    // ACTUALIZAR (U) - CORREGIDO
     public function actualizar()
     {
         $data = $this->request->getPost();
         $id = $data['id'];
 
-        if ($this->profesorModel->update($id, $data)) {
+        // ✅ VERIFICAR QUE EL PROFESOR EXISTA
+        if (!$profesorExistente = $this->profesorModel->find($id)) {
+            return redirect()->to(base_url('profesores'))->with('error', 'Profesor no encontrado.');
+        }
+
+        // ✅ SOLO VALIDAR DNI ÚNICO SI EL DNI CAMBIÓ
+        if ($data['dni'] != $profesorExistente['dni']) {
+            if (!$this->profesorModel->esDniUnico($data['dni'], $id)) {
+                return redirect()->back()->withInput()->with('errors', ['El DNI ingresado ya se encuentra registrado.']);
+            }
+        }
+
+        // ✅ USAR save() EN LUGAR DE update() PARA QUE FUNCIONEN LAS VALIDACIONES
+        if ($this->profesorModel->save($data)) {
             return redirect()->to(base_url('profesores'))->with('mensaje', 'Profesor actualizado exitosamente.');
         } else {
             return redirect()->back()->withInput()->with('errors', $this->profesorModel->errors());
@@ -64,9 +83,6 @@ class ProfesoresController extends Controller
     // ELIMINAR (D)
     public function eliminar($id = null)
     {
-        // Se recomienda poner la FK de la tabla carreras en NULL antes de eliminar un profesor
-        // para evitar que la eliminación falle por restricción.
-
         if ($this->profesorModel->delete($id)) {
             return redirect()->to(base_url('profesores'))->with('mensaje', 'Profesor eliminado exitosamente.');
         } else {

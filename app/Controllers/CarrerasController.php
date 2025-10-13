@@ -19,7 +19,6 @@ class CarrerasController extends Controller
     public function index()
     {
         $data = [
-            // Usa el método con JOINs que definimos en el modelo
             'carreras' => $this->carreraModel->obtenerCarrerasDetalle(), 
             'titulo' => 'Gestión de Carreras',
         ];
@@ -37,10 +36,20 @@ class CarrerasController extends Controller
         return view('carreras/crear', $data);
     }
 
-    // GUARDAR (C)
+    // GUARDAR (C) - MEJORADO
     public function guardar()
     {
         $data = $this->request->getPost();
+        
+        // ✅ VALIDACIÓN MANUAL ADICIONAL (opcional, ya está en el modelo)
+        if (!$this->carreraModel->esNombreUnico($data['nombre'])) {
+            return redirect()->back()->withInput()->with('errors', ['Ya existe una carrera con este nombre.']);
+        }
+
+        if (!$this->carreraModel->esCodigoUnico($data['codigo'])) {
+            return redirect()->back()->withInput()->with('errors', ['El código de carrera ya está en uso.']);
+        }
+
         if ($this->carreraModel->insert($data)) {
             return redirect()->to(base_url('carreras'))->with('mensaje', 'Carrera creada exitosamente.');
         } else {
@@ -64,11 +73,25 @@ class CarrerasController extends Controller
         return view('carreras/editar', $data);
     }
 
-    // ACTUALIZAR (U)
+    // ACTUALIZAR (U) - MEJORADO
     public function actualizar()
     {
         $data = $this->request->getPost();
         $id = $data['id'];
+
+        // ✅ VERIFICAR QUE LA CARRERA EXISTA
+        if (!$carreraExistente = $this->carreraModel->find($id)) {
+            return redirect()->to(base_url('carreras'))->with('error', 'Carrera no encontrada.');
+        }
+
+        // ✅ VALIDACIÓN MANUAL ADICIONAL PARA ACTUALIZACIÓN
+        if ($data['nombre'] != $carreraExistente['nombre'] && !$this->carreraModel->esNombreUnico($data['nombre'], $id)) {
+            return redirect()->back()->withInput()->with('errors', ['Ya existe una carrera con este nombre.']);
+        }
+
+        if ($data['codigo'] != $carreraExistente['codigo'] && !$this->carreraModel->esCodigoUnico($data['codigo'], $id)) {
+            return redirect()->back()->withInput()->with('errors', ['El código de carrera ya está en uso.']);
+        }
 
         if ($this->carreraModel->update($id, $data)) {
             return redirect()->to(base_url('carreras'))->with('mensaje', 'Carrera actualizada exitosamente.');
@@ -84,12 +107,9 @@ class CarrerasController extends Controller
             return redirect()->to(base_url('carreras'))->with('error', 'ID de carrera no proporcionado.');
         }
         
-        // Debe considerar la restricción de clave foránea:
-        // Si hay estudiantes enlazados a esta carrera, la eliminación fallará.
         if ($this->carreraModel->delete($id)) {
             return redirect()->to(base_url('carreras'))->with('mensaje', 'Carrera eliminada exitosamente.');
         } else {
-            // Un error común aquí es por restricción de clave foránea (FK constraint)
             return redirect()->to(base_url('carreras'))->with('error', 'Error al eliminar. Verifique que no haya estudiantes o datos asociados.');
         }
     }

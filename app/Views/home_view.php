@@ -24,7 +24,7 @@
                 </div>
             </div>
             <div class="col-lg-6 text-center" data-aos="fade-left">
-                <div class="feature-icon mx-auto">
+                <div class="feature-icon">
                     <i class="bi bi-graph-up-arrow"></i>
                 </div>
                 <h4 class="text-light mt-3">Sistema Optimizado</h4>
@@ -168,19 +168,19 @@
             <div class="floating-card h-100">
                 <h4 class="section-title mb-4">Accesos Rápidos</h4>
                 <div class="d-grid gap-2">
-                    <a href="<?= base_url('estudiantes/crear') ?>" class="btn btn-outline-primary d-flex align-items-center justify-content-center py-3">
+                    <a href="<?= base_url('estudiantes/crear') ?>" class="btn btn-outline-modern d-flex align-items-center justify-content-center py-3">
                         <i class="bi bi-person-plus me-2"></i>
                         Nuevo Estudiante
                     </a>
-                    <a href="<?= base_url('profesores/crear') ?>" class="btn btn-outline-primary d-flex align-items-center justify-content-center py-3">
+                    <a href="<?= base_url('profesores/crear') ?>" class="btn btn-outline-modern d-flex align-items-center justify-content-center py-3">
                         <i class="bi bi-person-badge-plus me-2"></i>
                         Nuevo Profesor
                     </a>
-                    <a href="<?= base_url('carreras') ?>" class="btn btn-outline-primary d-flex align-items-center justify-content-center py-3">
+                    <a href="<?= base_url('carreras') ?>" class="btn btn-outline-modern d-flex align-items-center justify-content-center py-3">
                         <i class="bi bi-journal-plus me-2"></i>
                         Gestionar Carreras
                     </a>
-                    <a href="<?= base_url('categorias') ?>" class="btn btn-outline-primary d-flex align-items-center justify-content-center py-3">
+                    <a href="<?= base_url('categorias') ?>" class="btn btn-outline-modern d-flex align-items-center justify-content-center py-3">
                         <i class="bi bi-tags me-2"></i>
                         Ver Categorías
                     </a>

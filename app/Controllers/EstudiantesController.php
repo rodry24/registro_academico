@@ -38,10 +38,7 @@ class EstudiantesController extends Controller
     {
         $data = $this->request->getPost();
 
-        // DEBUG: Ver qué datos llegan
-        // log_message('debug', 'Datos recibidos: ' . print_r($data, true));
-
-        // CONVERSIÓN DE FECHAS MEJORADA
+        // CONVERSIÓN DE FECHAS
         if (!empty($data['fecha_nacimiento'])) {
             $data['fecha_nacimiento'] = $this->convertirFechaForm($data['fecha_nacimiento']);
         }
@@ -50,8 +47,10 @@ class EstudiantesController extends Controller
             $data['fecha_ingreso'] = $this->convertirFechaForm($data['fecha_ingreso']);
         }
 
-        // DEBUG: Ver fechas convertidas
-        // log_message('debug', 'Fechas convertidas - Nacimiento: ' . $data['fecha_nacimiento'] . ' - Ingreso: ' . $data['fecha_ingreso']);
+        // ✅ VALIDACIÓN MANUAL PARA DNI ÚNICO EN CREACIÓN
+        if (!$this->estudianteModel->esDniUnico($data['dni'])) {
+            return redirect()->back()->withInput()->with('errors', ['El DNI ingresado ya se encuentra registrado.']);
+        }
 
         if (! $this->estudianteModel->save($data)) {
             return redirect()->back()->withInput()->with('errors', $this->estudianteModel->errors());
@@ -80,6 +79,12 @@ class EstudiantesController extends Controller
         $data = $this->request->getPost();
         $id = $data['id'];
 
+        // ✅ VERIFICAR QUE EL ESTUDIANTE EXISTA
+        if (!$this->estudianteModel->find($id)) {
+            return redirect()->to(base_url('estudiantes'))->with('error', 'Estudiante no encontrado.');
+        }
+
+        // CONVERSIÓN DE FECHAS
         if (!empty($data['fecha_nacimiento'])) {
             $data['fecha_nacimiento'] = $this->convertirFechaForm($data['fecha_nacimiento']);
         }
@@ -88,6 +93,12 @@ class EstudiantesController extends Controller
             $data['fecha_ingreso'] = $this->convertirFechaForm($data['fecha_ingreso']);
         }
 
+        // ✅ VALIDACIÓN MANUAL PARA DNI ÚNICO EN ACTUALIZACIÓN
+        if (!$this->estudianteModel->esDniUnico($data['dni'], $id)) {
+            return redirect()->back()->withInput()->with('errors', ['El DNI ingresado ya se encuentra registrado.']);
+        }
+
+        // ✅ USAR update() PARA ACTUALIZACIÓN
         if (! $this->estudianteModel->update($id, $data)) {
             return redirect()->back()->withInput()->with('errors', $this->estudianteModel->errors());
         }
@@ -130,7 +141,6 @@ class EstudiantesController extends Controller
         return $fecha;
     }
 
-    // EstudiantesController.php
     public function inicio()
     {
         $data = [
@@ -138,5 +148,4 @@ class EstudiantesController extends Controller
         ];
         return view('inicio', $data);
     }
-    
 }
