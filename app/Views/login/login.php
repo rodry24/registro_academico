@@ -8,7 +8,7 @@
 </head>
 <body>
     <div class="form-container">
-        <form class="form-box" action="principal.html" method="POST">
+        <form class="form-box" action="login" method="POST">
             <h2>Iniciar Sesión</h2>
 
             <div class="input-group">
@@ -24,7 +24,7 @@
             <button type="submit">Entrar</button>
 
             <p class="form-text">
-                ¿No tienes cuenta? <a href="register.html">Regístrate</a>
+                ¿No tienes cuenta? <a href="login/register">Regístrate</a>
             </p>
         </form>
     </div>

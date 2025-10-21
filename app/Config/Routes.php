@@ -5,8 +5,19 @@ use CodeIgniter\Router\RouteCollection;
 /**
  * @var RouteCollection $routes
  */
+
+// LOGIN
+$routes->get('/', 'Autorizacion::login');        // primera vista
+$routes->post('login', 'Autorizacion::doLogin'); // procesa el form
+$routes->get('logout', 'Autorizacion::logout');  // cierra sesión
+
 $routes->get('/', 'Home::index');
 // app/Config/Routes.php
+
+// Vistas según rol
+$routes->get('admin', 'Home::admin');        // para admin
+$routes->get('profesor', 'Home::profesor');  // para profesor
+$routes->get('alumno', 'Home::alumno');      // para alumno
 
 $routes->get('/', 'EstudiantesController::inicio');
 
@@ -53,3 +64,4 @@ $routes->post('categorias/guardar', 'CategoriasController::guardar');
 $routes->get('categorias/editar/(:num)', 'CategoriasController::editar/$1'); 
 $routes->post('categorias/actualizar', 'CategoriasController::actualizar'); 
 $routes->get('categorias/eliminar/(:num)', 'CategoriasController::eliminar/$1');
+
