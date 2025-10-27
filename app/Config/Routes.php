@@ -5,29 +5,30 @@ use CodeIgniter\Router\RouteCollection;
 /**
  * @var RouteCollection $routes
  */
-$routes->get('/', 'Home::index');
-// app/Config/Routes.php
 
-$routes->get('/', 'EstudiantesController::inicio');
+// RUTA PRINCIPAL
+$routes->get('/', 'Home::index');
+
+// LOGIN
+$routes->get('login', 'Autorizacion::login');        // GET: mostrar formulario
+$routes->post('login', 'Autorizacion::doLogin');     // POST: procesar login
+$routes->get('logout', 'Autorizacion::logout');
+
+// REGISTRO
+$routes->get('register', 'Autorizacion::register');      // GET: mostrar formulario
+$routes->post('register', 'Autorizacion::doRegister');   // POST: procesar registro
+
+// PANELES
+$routes->get('admin', 'Home::admin');
+$routes->get('profesor', 'Home::profesor');
+$routes->get('alumno', 'Home::alumno');
 
 // --- RUTAS PARA ESTUDIANTES ---
-
-// R: Listado (GET /estudiantes)
 $routes->get('estudiantes', 'EstudiantesController::index'); 
-
-// C: Mostrar formulario (GET /estudiantes/crear)
 $routes->get('estudiantes/crear', 'EstudiantesController::crear'); 
-
-// C: Guardar datos (POST /estudiantes/guardar)
 $routes->post('estudiantes/guardar', 'EstudiantesController::guardar'); 
-
-// U: Mostrar formulario de edición (GET /estudiantes/editar/1)
 $routes->get('estudiantes/editar/(:num)', 'EstudiantesController::editar/$1'); 
-
-// U: Procesar actualización (POST /estudiantes/actualizar)
 $routes->post('estudiantes/actualizar', 'EstudiantesController::actualizar'); 
-
-// D: Eliminar registro (GET /estudiantes/eliminar/1)
 $routes->get('estudiantes/eliminar/(:num)', 'EstudiantesController::eliminar/$1');
 
 // --- RUTAS PARA CARRERAS ---

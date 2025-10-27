@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?= $titulo ?? 'Sistema Instituto' ?> | Instituto 57</title>
+    <title><?= $this->renderSection('title') ?? 'Sistema Instituto' ?> | Instituto Académico</title>
     
     <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -14,8 +14,10 @@
     <!-- AOS Animation -->
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     
-    <!-- NUESTRO CSS PRINCIPAL - TODO EN UN ARCHIVO -->
+    <!-- CSS PRINCIPAL -->
     <link rel="stylesheet" href="<?= base_url('css/main.css') ?>">
+    
+    <?= $this->renderSection('styles') ?>
 </head>
 <body class="d-flex flex-column min-vh-100">
     <!-- News Ticker -->
@@ -37,11 +39,11 @@
         </div>
     </div>
 
-    <!-- Navigation - Agregar clase navbar-modern -->
+    <!-- Navigation -->
     <nav class="navbar navbar-expand-lg navbar-light sticky-top navbar-modern">
         <div class="container">
             <a class="navbar-brand navbar-brand-modern" href="<?= base_url() ?>">
-                <i class="bi bi-mortarboard-fill me-2 gradient-text"></i>
+                <i class="bi bi-mortarboard-fill me-2"></i>
                 Instituto Académico
             </a>
             
@@ -52,15 +54,17 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="nav-link nav-link-modern active" href="<?= base_url() ?>">
+                        <a class="nav-link nav-link-modern <?= current_url() == base_url() ? 'active' : '' ?>" href="<?= base_url() ?>">
                             <i class="bi bi-house me-1"></i> Inicio
                         </a>
                     </li>
+                    <?php if (session()->get('isLoggedIn')): ?>
                     <li class="nav-item dropdown">
                         <a class="nav-link nav-link-modern dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
                             <i class="bi bi-people me-1"></i> Gestión
                         </a>
                         <ul class="dropdown-menu">
+                            <?php if (session()->get('rol') == 'admin'): ?>
                             <li><a class="dropdown-item" href="<?= base_url('estudiantes') ?>">
                                 <i class="bi bi-people-fill me-2"></i>Estudiantes
                             </a></li>
@@ -74,32 +78,59 @@
                             <li><a class="dropdown-item" href="<?= base_url('categorias') ?>">
                                 <i class="bi bi-tags me-2"></i>Categorías
                             </a></li>
+                            <?php endif; ?>
                         </ul>
                     </li>
+                    <?php endif; ?>
                     <li class="nav-item">
-                        <a class="nav-link nav-link-modern" href="#">
-                            <i class="bi bi-info-circle me-1"></i> Nosotros
+                        <a class="nav-link nav-link-modern" href="#features">
+                            <i class="bi bi-info-circle me-1"></i> Funcionalidades
                         </a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link nav-link-modern" href="#">
-                            <i class="bi bi-telephone me-1"></i> Contacto
-                        </a>
-                    </li>
+                    <?php if (session()->get('isLoggedIn')): ?>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link nav-link-modern dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                                <i class="bi bi-person-circle me-1"></i> <?= session()->get('nombre') ?>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <?php if (session()->get('rol') == 'admin'): ?>
+                                    <li><a class="dropdown-item" href="<?= base_url('admin') ?>">
+                                        <i class="bi bi-speedometer2 me-2"></i>Panel Admin
+                                    </a></li>
+                                <?php elseif (session()->get('rol') == 'profesor'): ?>
+                                    <li><a class="dropdown-item" href="<?= base_url('profesor') ?>">
+                                        <i class="bi bi-person-badge me-2"></i>Panel Profesor
+                                    </a></li>
+                                <?php else: ?>
+                                    <li><a class="dropdown-item" href="<?= base_url('alumno') ?>">
+                                        <i class="bi bi-person-circle me-2"></i>Panel Estudiante
+                                    </a></li>
+                                <?php endif; ?>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="<?= base_url('logout') ?>">
+                                    <i class="bi bi-box-arrow-right me-2"></i>Cerrar Sesión
+                                </a></li>
+                            </ul>
+                        </li>
+                    <?php else: ?>
+                        <li class="nav-item">
+                            <a class="nav-link nav-link-modern" href="<?= base_url('login') ?>">
+                                <i class="bi bi-box-arrow-in-right me-1"></i> Login
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link nav-link-modern" href="<?= base_url('register') ?>">
+                                <i class="bi bi-person-plus me-1"></i> Registro
+                            </a>
+                        </li>
+                    <?php endif; ?>
                 </ul>
             </div>
         </div>
     </nav>
 
-    <!-- Breadcrumbs - Agregar clase breadcrumb-modern -->
-    <div class="container mt-4">
-        <nav aria-label="breadcrumb">
-            <ol class="breadcrumb breadcrumb-modern">
-                <li class="breadcrumb-item"><a href="<?= base_url() ?>">Inicio</a></li>
-                <li class="breadcrumb-item active">Dashboard</li>
-            </ol>
-        </nav>
-    </div>
+    <!-- Breadcrumbs -->
+    <?= $this->renderSection('breadcrumbs') ?>
 
     <!-- Main Content -->
     <main class="flex-grow-1">
@@ -131,8 +162,8 @@
         </div>
     </div>
 
-    <!-- Footer - Agregar clase footer-modern -->
-    <footer class="footer-modern mt-5">
+    <!-- Footer -->
+    <footer class="footer-modern">
         <div class="container py-5">
             <div class="row">
                 <div class="col-lg-4 mb-4">
@@ -140,7 +171,7 @@
                         <i class="bi bi-mortarboard-fill me-2"></i>Instituto Académico
                     </h5>
                     <p class="text-gray-300 mb-3">
-                        ofrecemos carreras docentes y tecnicas del nivel superior. su enseñanza es gratuita y otorga titulos oficiales. dependemos de la D.G.CyE.
+                        Ofrecemos carreras docentes y técnicas del nivel superior. Su enseñanza es gratuita y otorga títulos oficiales. Dependemos de la D.G.CyE.
                     </p>
                     <div class="social-links d-flex gap-2">
                         <a href="#"><i class="bi bi-facebook"></i></a>
@@ -152,9 +183,9 @@
                 <div class="col-lg-2 mb-4">
                     <h6 class="fw-bold mb-3 text-white">Enlaces Rápidos</h6>
                     <ul class="list-unstyled">
-                        <li class="mb-2"><a href="<?= base_url('estudiantes') ?>">Estudiantes</a></li>
-                        <li class="mb-2"><a href="<?= base_url('profesores') ?>">Profesores</a></li>
-                        <li class="mb-2"><a href="<?= base_url('carreras') ?>">Carreras</a></li>
+                        <li class="mb-2"><a href="<?= base_url('#') ?>">Estudiantes</a></li>
+                        <li class="mb-2"><a href="<?= base_url('#') ?>">Profesores</a></li>
+                        <li class="mb-2"><a href="<?= base_url('#') ?>">Carreras</a></li>
                         <li class="mb-2"><a href="#">Admisiones</a></li>
                     </ul>
                 </div>
@@ -195,7 +226,7 @@
                 <div class="row align-items-center">
                     <div class="col-md-6">
                         <p class="mb-0 text-gray-400">
-                            &copy; 2024 Instituto 57. Todos los derechos reservados.
+                            &copy; 2024 Instituto Académico. Todos los derechos reservados.
                         </p>
                     </div>
                     <div class="col-md-6 text-md-end">
@@ -212,6 +243,27 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <!-- AOS Animation -->
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    
+    <!-- Scripts Globales -->
+    <script>
+        // Inicializar AOS
+        AOS.init({
+            duration: 800,
+            once: true
+        });
+
+        // Chat Widget
+        document.getElementById('chat-toggle').addEventListener('click', function() {
+            const chatBox = document.getElementById('chat-box');
+            chatBox.classList.toggle('d-none');
+        });
+
+        // Tooltips
+        const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+        const tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl);
+        });
+    </script>
     
     <?= $this->renderSection('scripts') ?>
 </body>

@@ -1,0 +1,122 @@
+/* ==============================
+   ESTILO GENERAL (LOGIN + REGISTRO)
+================================= */
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: "Poppins", sans-serif;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(135deg, #1e3a5f, #203a43, #2c5364);
+}
+
+/* Contenedor principal */
+.form-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+/* Caja del formulario */
+.form-box {
+    background-color: #ffffff;
+    padding: 40px 35px;
+    border-radius: 12px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
+    width: 340px;
+    text-align: center;
+    animation: fadeIn 0.6s ease-in-out;
+}
+
+/* Animación de entrada */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-15px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Título */
+.form-box h2 {
+    margin-bottom: 25px;
+    color: #1e3a5f;
+    font-size: 22px;
+    letter-spacing: 0.5px;
+}
+
+/* Campos de entrada */
+.input-group {
+    text-align: left;
+    margin-bottom: 18px;
+}
+
+.input-group label {
+    display: block;
+    font-size: 14px;
+    color: #333;
+    margin-bottom: 6px;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 10px;
+    border: 1.5px solid #ccc;
+    border-radius: 8px;
+    outline: none;
+    transition: 0.3s;
+    font-size: 14px;
+}
+
+.input-group input:focus {
+    border-color: #1e3a5f;
+    box-shadow: 0 0 6px rgba(30, 58, 95, 0.3);
+}
+
+/* Botón principal */
+button {
+    width: 100%;
+    padding: 12px;
+    background-color: #2e8b57;
+    color: white;
+    font-size: 16px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.3s;
+    margin-top: 8px;
+}
+
+button:hover {
+    background-color: #256d46;
+    transform: scale(1.02);
+}
+
+/* Texto debajo del botón */
+.form-text {
+    margin-top: 15px;
+    font-size: 14px;
+    color: #333;
+}
+
+.form-text a {
+    color: #1a73e8;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.form-text a:hover {
+    text-decoration: underline;
+}
+
+/* Responsividad */
+@media (max-width: 450px) {
+    .form-box {
+        width: 90%;
+        padding: 30px 25px;
+    }
+    .form-box h2 {
+        font-size: 20px;
+    }
+}
