@@ -37,7 +37,7 @@ class Autorizacion extends Controller
                     'isLoggedIn' => true
                 ]);
                
-                return redirect()->to('home'); // redirige al Home
+                return redirect()->to('Home'); // redirige al Home
             } else {
                 return redirect()->back()->with('error', 'Credenciales inválidas'); 
             }

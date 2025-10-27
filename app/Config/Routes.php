@@ -11,7 +11,7 @@ $routes->get('/', 'Autorizacion::login');        // primera vista
 $routes->post('login', 'Autorizacion::doLogin'); // procesa el form
 $routes->get('logout', 'Autorizacion::logout');  // cierra sesión
 
-$routes->get('/', 'Home::index');
+$routes->get('Home', 'Home::index');
 // app/Config/Routes.php
 
 // Vistas según rol
@@ -19,7 +19,6 @@ $routes->get('admin', 'Home::admin');        // para admin
 $routes->get('profesor', 'Home::profesor');  // para profesor
 $routes->get('alumno', 'Home::alumno');      // para alumno
 
-$routes->get('/', 'EstudiantesController::inicio');
 
 // --- RUTAS PARA ESTUDIANTES ---
 
