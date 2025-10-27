@@ -6,9 +6,9 @@ use CodeIgniter\Model;
 
 class UsuarioModel extends Model
 {
-    protected $table      = 'usuarios';       // Nombre de la tabla en tu BD
-    protected $primaryKey = 'id';     // PK
-    protected $allowedFields = ['nombre', 'email', 'password', 'rol']; // Campos editables
+    protected $table      = 'usuarios';
+    protected $primaryKey = 'id';
+    protected $allowedFields = ['email', 'password', 'rol', 'created_at', 'updated_at']; // Removido 'nombre'
 
     // Activar timestamps automáticos
     protected $useTimestamps = true;
@@ -17,7 +17,7 @@ class UsuarioModel extends Model
 
     public function getUsuarioPorId(int $id)
     {
-        return $this->where('id_usuario', $id)->first();
+        return $this->where('id', $id)->first();
     }
 
     public function getUsuarioPorEmail(string $email)

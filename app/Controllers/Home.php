@@ -1,32 +1,71 @@
-<?php namespace App\Controllers;
+<?php 
+namespace App\Controllers;
 
 class Home extends BaseController
 {
     public function index()
     {
-        // Página principal
-        //$data['titulo'] = 'Página Principal';
-        //return view('Views/home_view', $data);
+        // DEBUG: Verificar qué está pasando
+        error_log("Home::index() - Usuario logueado: " . (session()->get('isLoggedIn') ? 'SI' : 'NO'));
+        
+        if (session()->get('isLoggedIn')) {
+            $rol = session()->get('rol');
+            error_log("Redirigiendo según rol: " . $rol);
+            
+            switch ($rol) {
+                case 'admin':
+                    return redirect()->to('/admin');
+                case 'profesor':
+                    return redirect()->to('/profesor');
+                case 'estudiante':
+                    return redirect()->to('/alumno');
+                default:
+                    // Mostrar home público
+                    break;
+            }
+        }
+        
+        // Mostrar home público
+        error_log("Mostrando home_view.php");
+        return view('home_view');
     }
 
     public function admin()
     {
-        // Vista para administrador
-        $data['titulo'] = 'Panel de Administrador';
+        if (!session()->get('isLoggedIn') || session()->get('rol') != 'admin') {
+            return redirect()->to('/');
+        }
+        
+        $data = [
+            'titulo' => 'Panel de Administrador',
+            'usuario' => session()->get('nombre') ? session()->get('nombre') : 'Administrador'
+        ];
         return view('roles/admin', $data);
     }
 
     public function profesor()
     {
-        // Vista para profesor
-        $data['titulo'] = 'Panel de Profesor';
+        if (!session()->get('isLoggedIn') || session()->get('rol') != 'profesor') {
+            return redirect()->to('/');
+        }
+        
+        $data = [
+            'titulo' => 'Panel de Profesor', 
+            'usuario' => session()->get('nombre') ? session()->get('nombre') : 'Profesor'
+        ];
         return view('roles/profesor', $data);
     }
 
     public function alumno()
     {
-        // Vista para alumno
-        $data['titulo'] = 'Panel de Alumno';
+        if (!session()->get('isLoggedIn') || session()->get('rol') != 'estudiante') {
+            return redirect()->to('/');
+        }
+        
+        $data = [
+            'titulo' => 'Panel de Alumno',
+            'usuario' => session()->get('nombre') ? session()->get('nombre') : 'Estudiante'
+        ];
         return view('roles/alumno', $data);
     }
 }

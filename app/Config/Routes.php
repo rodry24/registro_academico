@@ -6,39 +6,29 @@ use CodeIgniter\Router\RouteCollection;
  * @var RouteCollection $routes
  */
 
-// LOGIN
-$routes->get('/', 'Autorizacion::login');        // primera vista
-$routes->post('login', 'Autorizacion::doLogin'); // procesa el form
-$routes->get('logout', 'Autorizacion::logout');  // cierra sesión
-
+// RUTA PRINCIPAL
 $routes->get('/', 'Home::index');
-// app/Config/Routes.php
 
-// Vistas según rol
-$routes->get('admin', 'Home::admin');        // para admin
-$routes->get('profesor', 'Home::profesor');  // para profesor
-$routes->get('alumno', 'Home::alumno');      // para alumno
+// LOGIN
+$routes->get('login', 'Autorizacion::login');        // GET: mostrar formulario
+$routes->post('login', 'Autorizacion::doLogin');     // POST: procesar login
+$routes->get('logout', 'Autorizacion::logout');
 
-$routes->get('/', 'EstudiantesController::inicio');
+// REGISTRO
+$routes->get('register', 'Autorizacion::register');      // GET: mostrar formulario
+$routes->post('register', 'Autorizacion::doRegister');   // POST: procesar registro
+
+// PANELES
+$routes->get('admin', 'Home::admin');
+$routes->get('profesor', 'Home::profesor');
+$routes->get('alumno', 'Home::alumno');
 
 // --- RUTAS PARA ESTUDIANTES ---
-
-// R: Listado (GET /estudiantes)
 $routes->get('estudiantes', 'EstudiantesController::index'); 
-
-// C: Mostrar formulario (GET /estudiantes/crear)
 $routes->get('estudiantes/crear', 'EstudiantesController::crear'); 
-
-// C: Guardar datos (POST /estudiantes/guardar)
 $routes->post('estudiantes/guardar', 'EstudiantesController::guardar'); 
-
-// U: Mostrar formulario de edición (GET /estudiantes/editar/1)
 $routes->get('estudiantes/editar/(:num)', 'EstudiantesController::editar/$1'); 
-
-// U: Procesar actualización (POST /estudiantes/actualizar)
 $routes->post('estudiantes/actualizar', 'EstudiantesController::actualizar'); 
-
-// D: Eliminar registro (GET /estudiantes/eliminar/1)
 $routes->get('estudiantes/eliminar/(:num)', 'EstudiantesController::eliminar/$1');
 
 // --- RUTAS PARA CARRERAS ---
@@ -64,4 +54,3 @@ $routes->post('categorias/guardar', 'CategoriasController::guardar');
 $routes->get('categorias/editar/(:num)', 'CategoriasController::editar/$1'); 
 $routes->post('categorias/actualizar', 'CategoriasController::actualizar'); 
 $routes->get('categorias/eliminar/(:num)', 'CategoriasController::eliminar/$1');
-
