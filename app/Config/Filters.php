@@ -34,6 +34,7 @@ class Filters extends BaseFilters
         'forcehttps'    => ForceHTTPS::class,
         'pagecache'     => PageCache::class,
         'performance'   => PerformanceMetrics::class,
+        'auth'          => \App\Filters\AuthFilter::class, // ← FILTRO DE AUTENTICACIÓN AGREGADO
     ];
 
     /**
@@ -106,5 +107,17 @@ class Filters extends BaseFilters
      *
      * @var array<string, array<string, list<string>>>
      */
-    public array $filters = [];
+    public array $filters = [
+        'auth' => [
+            'before' => [
+                'estudiantes*',
+                'carreras*', 
+                'profesores*',
+                'categorias*',
+                'admin*',
+                'profesor*',
+                'alumno*'
+            ]
+        ]
+    ];
 }
